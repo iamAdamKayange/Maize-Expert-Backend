@@ -26,6 +26,24 @@ const createTables = async () => {
       created_at TIMESTAMP DEFAULT NOW()
     );
   `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS expert_chat_sessions (
+        id SERIAL PRIMARY KEY,
+        expert_id INTEGER REFERENCES experts(id) ON DELETE CASCADE,
+        title VARCHAR(200) DEFAULT 'New Conversation',
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+    );
+`);
+await pool.query(`
+    CREATE TABLE IF NOT EXISTS expert_chat_messages (
+        id SERIAL PRIMARY KEY,
+        session_id INTEGER REFERENCES expert_chat_sessions(id) ON DELETE CASCADE,
+        role VARCHAR(20) CHECK (role IN ('user', 'assistant')),
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW()
+    );
+`);
 
   console.log('✅ Tables created (if not existed)');
 };

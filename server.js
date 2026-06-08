@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const scanRoutes = require('./routes/scanRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,6 +27,8 @@ app.get('/', (req, res) => {
 
 app.use('/api/expert', authRoutes);
 app.use('/api/expert', scanRoutes);
+
+app.use('/api/expert/chat', chatRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
