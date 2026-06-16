@@ -1,5 +1,4 @@
 const scanModel = require('../models/scanModel');
-const scanModel = require('../models/scanModel');
 
 const saveScan = async (req, res) => {
   try {
@@ -11,8 +10,19 @@ const saveScan = async (req, res) => {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
-    const saved = await scanModel.saveScan(expertId, expertName, label, confidence, scores, imageUrl);
-    res.status(201).json({ id: saved.id, message: 'Scan saved successfully' });
+    const saved = await scanModel.saveScan(
+      expertId,
+      expertName,
+      label,
+      confidence,
+      scores,
+      imageUrl || '' // Ensure imageUrl is saved even if empty
+    );
+    
+    res.status(201).json({ 
+      id: saved.id, 
+      message: 'Scan saved successfully' 
+    });
   } catch (error) {
     console.error('Save scan error:', error);
     res.status(500).json({ message: 'Server error' });
@@ -38,7 +48,6 @@ const getAllScans = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
 
 const uploadImage = async (req, res) => {
   try {
