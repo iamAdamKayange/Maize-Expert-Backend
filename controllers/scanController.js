@@ -1,4 +1,5 @@
 const scanModel = require('../models/scanModel');
+const scanModel = require('../models/scanModel');
 
 const saveScan = async (req, res) => {
   try {
@@ -38,4 +39,25 @@ const getAllScans = async (req, res) => {
   }
 };
 
-module.exports = { saveScan, getMyScans, getAllScans };
+
+const uploadImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No image file uploaded' });
+    }
+
+    // Build URL for the uploaded image
+    const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT || 5000}`;
+    const imageUrl = `${baseUrl}/uploads/${req.file.filename}`;
+
+    res.status(200).json({
+      message: 'Image uploaded successfully',
+      imageUrl: imageUrl
+    });
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+module.exports = { saveScan, getMyScans, getAllScans, uploadImage };
